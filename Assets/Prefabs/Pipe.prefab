@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8478203467786540673}
   - component: {fileID: 5954835686881375321}
   - component: {fileID: 7238197497497763479}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pipe-green (1)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -114,7 +114,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -189,7 +189,7 @@ GameObject:
   - component: {fileID: 1337045299517190642}
   - component: {fileID: 2005063785759118337}
   - component: {fileID: 3268861891064163498}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pipe-green
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -292,7 +292,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
