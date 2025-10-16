@@ -164,7 +164,7 @@ Transform:
   m_GameObject: {fileID: 57912208}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -381.36072, y: -409.29083, z: 9.255696}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -573,18 +573,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cfe3dc260b43d5468fd09cdd001dd2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mapSpeed: 2
   pipePool: {fileID: 57912209}
   coinPool: {fileID: 1144820286}
   basePrefab: {fileID: 1947841278888615369, guid: a14d4f961927cf7428e7e04ecdeb406e, type: 3}
-  baseScrollSpeed: 2
-  baseYPosition: -4
-  pipeSpawnInterval: 2
-  coinSpawnInterval: 3
-  spawnX: 12
-  pipeMinY: 3
-  pipeMaxY: 6
-  coinMinY: 2
-  coinMaxY: 4
+  baseYPosition: -4.5
+  pipeInitialSpawnPositionX: 2
+  coinInitialSpawnPositionX: 4
+  pipeSpawnOffset: 4
+  coinSpawnOffset: 4
+  pipeMinY: -1.5
+  pipeMaxY: 1.5
+  coinMinY: -1.2
+  coinMaxY: 1.2
 --- !u!4 &991022188
 Transform:
   m_ObjectHideFlags: 0
@@ -643,7 +644,7 @@ Transform:
   m_GameObject: {fileID: 1144820285}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -381.36072, y: -409.29083, z: 9.255696}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

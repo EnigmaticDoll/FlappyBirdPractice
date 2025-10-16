@@ -5,83 +5,98 @@ using UnityEditor.PackageManager;
 
 public class MapController : MonoBehaviour
 {
-    [Header("Object Pools")]
+    [Header("Common Parameter")]
+    [SerializeField] private float mapSpeed = 2f;
+
+    [Header("Object Pool")]
     [SerializeField] private ObjectPool pipePool;
     [SerializeField] private ObjectPool coinPool;
 
-    [Header("Base Prefab")]
+    [Header("Base Parameter")]
     [SerializeField] private GameObject basePrefab;
+    [SerializeField] private float baseYPosition = -4.5f;
 
-    [Header("Base Settings")]
-    [SerializeField] private float baseScrollSpeed = 2f;
-    [SerializeField] private float baseYPosition = -4f;
+    [Header("Spawn Parameter")]
+    [SerializeField] private float pipeInitialSpawnPositionX = 2f;
+    [SerializeField] private float coinInitialSpawnPositionX = 4f;
+    [SerializeField] private float pipeSpawnOffset = 4f;
+    [SerializeField] private float coinSpawnOffset = 4f;
+    [SerializeField] private float pipeMinY = -1.5f;
+    [SerializeField] private float pipeMaxY = 1.5f;
+    [SerializeField] private float coinMinY = -1.2f;
+    [SerializeField] private float coinMaxY = 1.2f;
 
-    [Header("Spawn Settings")]
-    [SerializeField] private float pipeSpawnInterval = 2f;
-    [SerializeField] private float coinSpawnInterval = 3f;
-    [SerializeField] private float pipeMinY = 0.5f;
-    [SerializeField] private float pipeMaxY = 2f;
-    [SerializeField] private float coinMinY = -2f;
-    [SerializeField] private float coinMaxY = 3f;
-
-    private Queue<GameObject> activePipes;
-    private Queue<GameObject> activeCoins;
+    private LinkedList<GameObject> activePipes;
+    private LinkedList<GameObject> activeCoins;
     private GameObject base1;
     private GameObject base2;
     private bool isGameRunning = false;
-    private float pipeTimer = 0f;
-    private float coinTimer = 0f;
-    private float spawnOffset;
+    private float runtimeSpawnPositionX;
+    private float runtimeDespawnPositionX;
     private float baseWidth;
 
-    void Update()
+    private void FixedUpdate()
     {
         if (!isGameRunning) return;
 
-        UpdateBaseScroll(Time.deltaTime);
+        FixedUpdateBaseScroll(Time.fixedDeltaTime);
+        FixedUpdatePipesAndCoins(Time.fixedDeltaTime);
 
-        pipeTimer += Time.deltaTime;
-        if (pipeTimer >= pipeSpawnInterval)
+        while (activePipes.Last != null && activePipes.Last.Value.transform.position.x < runtimeSpawnPositionX)
         {
-            SpawnPipe();
-            pipeTimer = 0f;
+            SpawnPipe(activePipes.Last.Value.transform.position.x + pipeSpawnOffset, Random.Range(pipeMinY, pipeMaxY));
         }
 
-        coinTimer += Time.deltaTime;
-        if (coinTimer >= coinSpawnInterval)
+        while (activeCoins.Last != null && activeCoins.Last.Value.transform.position.x < runtimeSpawnPositionX)
         {
-            SpawnCoin();
-            coinTimer = 0f;
+            SpawnCoin(activeCoins.Last.Value.transform.position.x + coinSpawnOffset, Random.Range(coinMinY, coinMaxY));
         }
     }
 
     public void InitializeMap()
     {
-        if (activePipes == null) activePipes = new Queue<GameObject>();
-        if (activeCoins == null) activeCoins = new Queue<GameObject>();
-
-        pipeTimer = pipeSpawnInterval;
-        coinTimer = coinSpawnInterval;
-
-        baseWidth = basePrefab.GetComponent<SpriteRenderer>().size.x * basePrefab.transform.lossyScale.x;
-        spawnOffset = Camera.main.orthographicSize * Camera.main.aspect;
+        if (activePipes == null) activePipes = new LinkedList<GameObject>();
+        if (activeCoins == null) activeCoins = new LinkedList<GameObject>();
 
         ReturnAllObjectsToPool();
-        CreateBaseObjects();
+
+        baseWidth = basePrefab.GetComponent<SpriteRenderer>().size.x * basePrefab.transform.lossyScale.x;
+
+        float pipeSpriteWidth = 0;
+        try
+        {
+            SpriteRenderer[] renderers = pipePool.pooledPrefab.GetComponentsInChildren<SpriteRenderer>();
+            foreach (SpriteRenderer r in renderers) pipeSpriteWidth = Mathf.Max(pipeSpriteWidth, r.size.x);
+        }
+        catch { Debug.LogWarning("Cannot access the SpriteRenderer component for the pooled prefab of pipePool."); throw; }
+
+        float coinSpriteWidth = 0;
+        try
+        {
+            SpriteRenderer[] renderers = coinPool.pooledPrefab.GetComponentsInChildren<SpriteRenderer>();
+            foreach (SpriteRenderer r in renderers) coinSpriteWidth = Mathf.Max(coinSpriteWidth, r.size.x);
+        }
+        catch { Debug.LogWarning("Cannot access the SpriteRenderer component for the pooled prefab of coinPool."); throw; }
+
+        runtimeSpawnPositionX = Camera.main.orthographicSize * Camera.main.aspect + Mathf.Max(pipeSpriteWidth, coinSpriteWidth) / 2;
+        runtimeDespawnPositionX = -runtimeSpawnPositionX;
+
+        InitializeBase();
+        InitializePipesAndCoins();
     }
 
     private void ReturnAllObjectsToPool()
     {
-        while (activePipes.Count > 0)
+        while (activePipes.First != null)
         {
-            GameObject pipe = activePipes.Dequeue();
-            if (pipe != null) pipePool.ReturnObject(pipe);
+            pipePool.ReturnObject(activePipes.First.Value);
+            activePipes.RemoveFirst();
         }
 
-        while (activeCoins.Count > 0)
+        while (activeCoins.First != null)
         {
-            GameObject coin = activeCoins.Dequeue();
-            if (coin != null) coinPool.ReturnObject(coin);
+            coinPool.ReturnObject(activeCoins.First.Value);
+            activeCoins.RemoveFirst();
         }
     }
 
@@ -95,29 +110,52 @@ public class MapController : MonoBehaviour
         isGameRunning = false;
     }
 
-    private void UpdateBaseScroll(float time)
+    private void FixedUpdateBaseScroll(float time)
     {
         if (base1 == null || base2 == null) return;
 
-        base1.transform.Translate(Vector2.left * baseScrollSpeed * Time.deltaTime);
-        base2.transform.Translate(Vector2.left * baseScrollSpeed * Time.deltaTime);
+        base1.transform.Translate(Vector2.left * mapSpeed * time);
+        base2.transform.Translate(Vector2.left * mapSpeed * time);
 
-        if (base1.transform.position.x <= -baseWidth)
+        if (base1.transform.position.x < -baseWidth)
         {
             base1.transform.SetPositionAndRotation(
-                Vector3.up * baseYPosition + Vector3.right * baseWidth,
+                Vector3.up * baseYPosition + Vector3.right * (base2.transform.position.x + baseWidth),
                 Quaternion.identity);
         }
 
-        if (base2.transform.position.x <= -baseWidth)
+        if (base2.transform.position.x < -baseWidth)
         {
             base2.transform.SetPositionAndRotation(
-                Vector3.up * baseYPosition + Vector3.right * baseWidth,
+                Vector3.up * baseYPosition + Vector3.right * (base1.transform.position.x + baseWidth),
                 Quaternion.identity);
         }
     }
 
-    private void CreateBaseObjects()
+    private void FixedUpdatePipesAndCoins(float time)
+    {
+        foreach (GameObject obj in activePipes)
+        {
+            obj.transform.Translate(Vector2.left * mapSpeed * time);
+        }
+        while (activePipes.First != null && activePipes.First.Value.transform.position.x < runtimeDespawnPositionX)
+        {
+            pipePool.ReturnObject(activePipes.First.Value);
+            activePipes.RemoveFirst();
+        }
+
+        foreach (GameObject obj in activeCoins)
+        {
+            obj.transform.Translate(Vector2.left * mapSpeed * time);
+        }
+        while (activeCoins.First != null && activeCoins.First.Value.transform.position.x < runtimeDespawnPositionX)
+        {
+            coinPool.ReturnObject(activeCoins.First.Value);
+            activeCoins.RemoveFirst();
+        }
+    }
+
+    private void InitializeBase()
     {
         if (base1 != null) Destroy(base1);
         if (base2 != null) Destroy(base2);
@@ -126,43 +164,50 @@ public class MapController : MonoBehaviour
         base2 = Instantiate(basePrefab, new Vector3(baseWidth, baseYPosition, 0), Quaternion.identity, this.transform);
     }
 
-    private void SpawnPipe()
+    private void InitializePipesAndCoins()
+    {
+        for (float x = pipeInitialSpawnPositionX; x < runtimeSpawnPositionX; x += pipeSpawnOffset)
+        {
+            SpawnPipe(x, Random.Range(pipeMinY, pipeMaxY));
+        }
+
+        for (float x = coinInitialSpawnPositionX; x < runtimeSpawnPositionX; x += coinSpawnOffset)
+        {
+            SpawnCoin(x, Random.Range(coinMinY, coinMaxY));
+        }
+    }
+
+    private void SpawnPipe(float x, float y)
     {
         GameObject pipe = pipePool.GetObject(this.transform);
 
         if (pipe != null)
         {
-            float randomY = Random.Range(pipeMinY, pipeMaxY);
-            pipe.transform.position = new Vector3(spawnOffset, randomY, 0);
+            pipe.transform.position = new Vector2(x, y);
             pipe.SetActive(true);
-
-            Pipe pipeScript = pipe.GetComponent<Pipe>();
-            if (pipeScript != null)
-            {
-                pipeScript.SetPool(pipePool);
-            }
-
-            activePipes.Enqueue(pipe);
+            activePipes.AddLast(pipe);
         }
     }
 
-    private void SpawnCoin()
+    private void SpawnCoin(float x, float y)
     {
-        GameObject coin = coinPool.GetObject();
+        GameObject coin = coinPool.GetObject(this.transform);
 
         if (coin != null)
         {
-            float randomY = Random.Range(coinMinY, coinMaxY);
-            coin.transform.position = new Vector3(spawnOffset, randomY, 0);
+            coin.transform.position = new Vector2(x, y);
             coin.SetActive(true);
+            activeCoins.AddLast(coin);
+        }
+    }
 
-            Coin coinScript = coin.GetComponent<Coin>();
-            if (coinScript != null)
-            {
-                coinScript.SetPool(coinPool);
-            }
-
-            activeCoins.Enqueue(coin);
+    private void OnPlayerCollectCoin(GameObject coin)
+    {
+        LinkedListNode<GameObject> node = activeCoins.Find(coin);
+        if (node != null)
+        {
+            coinPool.ReturnObject(node.Value);
+            activeCoins.Remove(coin);
         }
     }
 }
