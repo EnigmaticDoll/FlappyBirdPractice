@@ -13,7 +13,6 @@ public class MapController : MonoBehaviour
 
     [Header("Base Settings")]
     [SerializeField] private float baseScrollSpeed = 2f;
-    [SerializeField] private float baseWidth = 10f;
     [SerializeField] private float baseYPosition = -4f;
 
     [Header("Spawn Settings")]
@@ -32,12 +31,13 @@ public class MapController : MonoBehaviour
     private bool isGameRunning = false;
     private float pipeTimer = 0f;
     private float coinTimer = 0f;
+    private float baseWidth;
 
     void Update()
     {
         if (!isGameRunning) return;
 
-        UpdateBaseScroll();
+        UpdateBaseScroll(Time.deltaTime);
 
         pipeTimer += Time.deltaTime;
         if (pipeTimer >= pipeSpawnInterval)
@@ -56,16 +56,16 @@ public class MapController : MonoBehaviour
 
     public void InitializeMap()
     {
-        if (activePipes == null)
-            activePipes = new Queue<GameObject>();
-        if (activeCoins == null)
-            activeCoins = new Queue<GameObject>();
-
-        ReturnAllObjectsToPool();
-        CreateBaseObjects();
+        if (activePipes == null) activePipes = new Queue<GameObject>();
+        if (activeCoins == null) activeCoins = new Queue<GameObject>();
 
         pipeTimer = pipeSpawnInterval;
         coinTimer = coinSpawnInterval;
+
+        baseWidth = basePrefab.GetComponent<SpriteRenderer>().size.x * basePrefab.transform.lossyScale.x;
+
+        ReturnAllObjectsToPool();
+        CreateBaseObjects();
     }
 
     private void ReturnAllObjectsToPool()
@@ -73,19 +73,13 @@ public class MapController : MonoBehaviour
         while (activePipes.Count > 0)
         {
             GameObject pipe = activePipes.Dequeue();
-            if (pipe != null)
-            {
-                pipePool.ReturnObject(pipe);
-            }
+            if (pipe != null) pipePool.ReturnObject(pipe);
         }
 
         while (activeCoins.Count > 0)
         {
             GameObject coin = activeCoins.Dequeue();
-            if (coin != null)
-            {
-                coinPool.ReturnObject(coin);
-            }
+            if (coin != null) coinPool.ReturnObject(coin);
         }
     }
 
@@ -99,21 +93,25 @@ public class MapController : MonoBehaviour
         isGameRunning = false;
     }
 
-    private void UpdateBaseScroll()
+    private void UpdateBaseScroll(float time)
     {
         if (base1 == null || base2 == null) return;
 
-        base1.transform.position += Vector3.left * baseScrollSpeed * Time.deltaTime;
-        base2.transform.position += Vector3.left * baseScrollSpeed * Time.deltaTime;
+        base1.transform.Translate(Vector2.left * baseScrollSpeed * Time.deltaTime);
+        base2.transform.Translate(Vector2.left * baseScrollSpeed * Time.deltaTime);
 
         if (base1.transform.position.x <= -baseWidth)
         {
-            base1.transform.position = new Vector3(base2.transform.position.x + baseWidth, baseYPosition, 0);
+            base1.transform.SetPositionAndRotation(
+                Vector3.up * baseYPosition + Vector3.right * baseWidth,
+                Quaternion.identity);
         }
 
         if (base2.transform.position.x <= -baseWidth)
         {
-            base2.transform.position = new Vector3(base1.transform.position.x + baseWidth, baseYPosition, 0);
+            base2.transform.SetPositionAndRotation(
+                Vector3.up * baseYPosition + Vector3.right * baseWidth,
+                Quaternion.identity);
         }
     }
 
