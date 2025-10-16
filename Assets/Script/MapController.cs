@@ -1,0 +1,168 @@
+using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
+public class MapController : MonoBehaviour
+{
+    [Header("Object Pools")]
+    [SerializeField] private ObjectPool pipePool;
+    [SerializeField] private ObjectPool coinPool;
+
+    [Header("Base Prefab")]
+    [SerializeField] private GameObject basePrefab;
+
+    [Header("Base Settings")]
+    [SerializeField] private float baseScrollSpeed = 2f;
+    [SerializeField] private float baseWidth = 10f;
+    [SerializeField] private float baseYPosition = -4f;
+
+    [Header("Spawn Settings")]
+    [SerializeField] private float pipeSpawnInterval = 2f;
+    [SerializeField] private float coinSpawnInterval = 3f;
+    [SerializeField] private float spawnX = 12f;
+    [SerializeField] private float pipeMinY = 0.5f;
+    [SerializeField] private float pipeMaxY = 2f;
+    [SerializeField] private float coinMinY = -2f;
+    [SerializeField] private float coinMaxY = 3f;
+
+    private Queue<GameObject> activePipes;
+    private Queue<GameObject> activeCoins;
+    private GameObject base1;
+    private GameObject base2;
+    private bool isGameRunning = false;
+    private float pipeTimer = 0f;
+    private float coinTimer = 0f;
+
+    void Update()
+    {
+        if (!isGameRunning) return;
+
+        UpdateBaseScroll();
+
+        pipeTimer += Time.deltaTime;
+        if (pipeTimer >= pipeSpawnInterval)
+        {
+            SpawnPipe();
+            pipeTimer = 0f;
+        }
+
+        coinTimer += Time.deltaTime;
+        if (coinTimer >= coinSpawnInterval)
+        {
+            SpawnCoin();
+            coinTimer = 0f;
+        }
+    }
+
+    public void InitializeMap()
+    {
+        if (activePipes == null)
+            activePipes = new Queue<GameObject>();
+        if (activeCoins == null)
+            activeCoins = new Queue<GameObject>();
+
+        ReturnAllObjectsToPool();
+        CreateBaseObjects();
+
+        pipeTimer = pipeSpawnInterval;
+        coinTimer = coinSpawnInterval;
+    }
+
+    private void ReturnAllObjectsToPool()
+    {
+        while (activePipes.Count > 0)
+        {
+            GameObject pipe = activePipes.Dequeue();
+            if (pipe != null)
+            {
+                pipePool.ReturnObject(pipe);
+            }
+        }
+
+        while (activeCoins.Count > 0)
+        {
+            GameObject coin = activeCoins.Dequeue();
+            if (coin != null)
+            {
+                coinPool.ReturnObject(coin);
+            }
+        }
+    }
+
+    public void StartMapProgression()
+    {
+        isGameRunning = true;
+    }
+
+    public void StopMapProgression()
+    {
+        isGameRunning = false;
+    }
+
+    private void UpdateBaseScroll()
+    {
+        if (base1 == null || base2 == null) return;
+
+        base1.transform.position += Vector3.left * baseScrollSpeed * Time.deltaTime;
+        base2.transform.position += Vector3.left * baseScrollSpeed * Time.deltaTime;
+
+        if (base1.transform.position.x <= -baseWidth)
+        {
+            base1.transform.position = new Vector3(base2.transform.position.x + baseWidth, baseYPosition, 0);
+        }
+
+        if (base2.transform.position.x <= -baseWidth)
+        {
+            base2.transform.position = new Vector3(base1.transform.position.x + baseWidth, baseYPosition, 0);
+        }
+    }
+
+    private void CreateBaseObjects()
+    {
+        if (base1 != null) Destroy(base1);
+        if (base2 != null) Destroy(base2);
+
+        base1 = Instantiate(basePrefab, new Vector3(0, baseYPosition, 0), Quaternion.identity);
+        base2 = Instantiate(basePrefab, new Vector3(baseWidth, baseYPosition, 0), Quaternion.identity);
+    }
+
+    private void SpawnPipe()
+    {
+        GameObject pipe = pipePool.GetObject();
+
+        if (pipe != null)
+        {
+            float randomY = Random.Range(pipeMinY, pipeMaxY);
+            pipe.transform.position = new Vector3(spawnX, randomY, 0);
+            pipe.SetActive(true);
+
+            Pipe pipeScript = pipe.GetComponent<Pipe>();
+            if (pipeScript != null)
+            {
+                pipeScript.SetPool(pipePool);
+            }
+
+            activePipes.Enqueue(pipe);
+        }
+    }
+
+    private void SpawnCoin()
+    {
+        GameObject coin = coinPool.GetObject();
+
+        if (coin != null)
+        {
+            float randomY = Random.Range(coinMinY, coinMaxY);
+            coin.transform.position = new Vector3(spawnX, randomY, 0);
+            coin.SetActive(true);
+
+            Coin coinScript = coin.GetComponent<Coin>();
+            if (coinScript != null)
+            {
+                coinScript.SetPool(coinPool);
+            }
+
+            activeCoins.Enqueue(coin);
+        }
+    }
+}
