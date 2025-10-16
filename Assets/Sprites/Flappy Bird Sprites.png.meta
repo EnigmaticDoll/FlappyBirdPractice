@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ede4b03d4049f481a80ce6756418b385
+guid: 834d5e901f857fe45910726227d199a6
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -30,11 +30,11 @@ TextureImporter:
   generateCubemap: 6
   cubemapConvolution: 0
   seamlessCubemap: 0
-  textureFormat: -1
-  maxTextureSize: 1024
+  textureFormat: 1
+  maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -63,13 +63,13 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   ignorePngGamma: 0
-  applyGammaDecoding: 1
+  applyGammaDecoding: 0
   swizzle: 50462976
-  cookieLightType: 1
+  cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 1024
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -82,7 +82,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
-    maxTextureSize: 1024
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -95,7 +95,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Android
-    maxTextureSize: 1024
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -108,7 +108,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Server
-    maxTextureSize: 1024
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -123,85 +123,127 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: coin-animation_0
+      name: ScoreResult
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 65
-        height: 64
+        x: 258
+        y: 7
+        width: 116
+        height: 59
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 3213e26135de0ac70800000000000000
-      internalID: 8980438598086963491
+      spriteID: 2b0f453234288644fb07e68a15985b94
+      internalID: -561278893
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: coin-animation_1
+      name: OK
       rect:
         serializedVersion: 2
-        x: 71
-        y: 0
-        width: 51
-        height: 64
+        x: 210
+        y: 91
+        width: 43
+        height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c7c5bc9deb46a6e20800000000000000
-      internalID: 3344596444136561788
+      spriteID: 0a21c6c3755572544b32b8468fc9a57c
+      internalID: 1354112331
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: coin-animation_2
+      name: Menu
       rect:
         serializedVersion: 2
-        x: 149
-        y: 0
-        width: 23
-        height: 64
+        x: 211
+        y: 109
+        width: 41
+        height: 13
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 427b1cdc640541010800000000000000
-      internalID: 1158639269171017508
+      spriteID: ae6bf60509e33fa49854ecaece8137b6
+      internalID: -1727107573
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: coin-animation_3
+      name: GoldenMedal
       rect:
         serializedVersion: 2
-        x: 199
-        y: 0
-        width: 50
-        height: 64
+        x: 213
+        y: 135
+        width: 24
+        height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e6ef0a5cb5af635a0800000000000000
-      internalID: -6541766136644436370
+      spriteID: 1b2900feaad96c047a10654e54812f8d
+      internalID: -1841061095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SilverMedal
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 159
+        width: 24
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f54b05c4d0208a46869df4547e525d4
+      internalID: -1557057122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StartButton
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 91
+        width: 53
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3184960d7d40c8d4a9b0d813d08b6939
+      internalID: -1620464001
       vertices: []
       indices: 
       edges: []
@@ -209,7 +251,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -217,10 +259,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      coin-animation_0: 8980438598086963491
-      coin-animation_1: 3344596444136561788
-      coin-animation_2: 1158639269171017508
-      coin-animation_3: -6541766136644436370
+      GoldenMedal: -1841061095
+      Menu: -1727107573
+      OK: 1354112331
+      ScoreResult: -561278893
+      SilverMedal: -1557057122
+      StartButton: -1620464001
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
