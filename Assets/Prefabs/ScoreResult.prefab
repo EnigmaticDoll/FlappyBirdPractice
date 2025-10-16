@@ -72,13 +72,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1063337386875426498}
   - component: {fileID: 2504491739498941632}
+  - component: {fileID: 7770958222139894960}
   m_Layer: 0
   m_Name: ScoreResult
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1063337386875426498
 Transform:
   m_ObjectHideFlags: 0
@@ -87,8 +88,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3280689222623277486}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -360, y: -640, z: 0}
   m_LocalScale: {x: 4, y: 4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -137,7 +138,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: -561278893, guid: 834d5e901f857fe45910726227d199a6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -149,6 +150,36 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &7770958222139894960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3280689222623277486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1fef0a739ffced42aa090905c2c0d07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numberSprites:
+  - {fileID: 21300000, guid: 44d82f5a986e1df4cb64fb6bc2dd099d, type: 3}
+  - {fileID: 21300000, guid: 03aa1f4fa15f14b438ad0292a85cd741, type: 3}
+  - {fileID: 21300000, guid: 500e7227004de4e4ea3fdbc736f66506, type: 3}
+  - {fileID: 21300000, guid: 9144e110d26add547a40fdc93e232b3d, type: 3}
+  - {fileID: 21300000, guid: 54482c4f66a36d54c97a634658260127, type: 3}
+  - {fileID: 21300000, guid: 918b7fb78a4c2e749857147a65072810, type: 3}
+  - {fileID: 21300000, guid: bdb2073e9607fcc408da6519b94b2efe, type: 3}
+  - {fileID: 21300000, guid: c4155fdf681127b46bcbffdefc42b11c, type: 3}
+  - {fileID: 21300000, guid: 53f400dfef31bc94fa87089919927fcd, type: 3}
+  - {fileID: 21300000, guid: 8379996fad7f23741bbdab3dddad18fb, type: 3}
+  normalScoreParent: {fileID: 9197908331410094422}
+  bestScoreParent: {fileID: 6525866852443905054}
+  medalParent: {fileID: 8280960739979180410}
+  numberSpacing: 30
+  numberSize: {x: 30, y: 45}
+  silverMedalPrefab: {fileID: 601631360222644369, guid: 1101a930506d9c749b631c7417179701, type: 3}
+  goldMedalPrefab: {fileID: 1731629251363971922, guid: 0afa3e40ad4180846aa7b798f6354011, type: 3}
 --- !u!1 &4045213731681653172
 GameObject:
   m_ObjectHideFlags: 0
