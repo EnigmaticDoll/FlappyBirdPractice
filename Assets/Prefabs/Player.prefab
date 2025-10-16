@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8918482717502568144}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -180,7 +180,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &8918482717502568144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,4 +196,5 @@ MonoBehaviour:
   flyForce: 3
   upRotate: 5
   downRotate: -5
+  animator: {fileID: 0}
   isDead: 0
