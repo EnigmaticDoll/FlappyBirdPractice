@@ -14,6 +14,7 @@ public class ObjectPool : MonoBehaviour
     private void OnEnable()
     {
         _PooledInstanceInactiveParant = new GameObject();
+        _PooledInstanceInactiveParant.transform.SetParent(this.transform);
         _PooledInstanceInactiveParant.SetActive(false);
 
         _Pool = new Queue<GameObject>();
