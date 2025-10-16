@@ -41,5 +41,12 @@ public class Player : MonoBehaviour
         rotationVector = new Vector3(0, 0, Mathf.Clamp((rotationVector.z + angleDelta), -70, 30));
         transform.eulerAngles = rotationVector;
     }
-
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            isDead = true;
+            rb.velocity = Vector2.zero;
+        }
+    }
 }
