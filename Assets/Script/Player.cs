@@ -1,3 +1,5 @@
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -71,7 +73,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Obstacle"))
         {
@@ -84,6 +86,19 @@ public class Player : MonoBehaviour
                 uiController.ShowGameOverUI();
             }
         }
+        if (collision.gameObject.CompareTag("Base"))
+        {
+            isDead = true;
+            rb.velocity = Vector2.zero;
+            rb.gravityScale = 0;
+            animator.enabled = false;
+            UIController uiController = FindObjectOfType<UIController>();
+            if (uiController != null)
+            {
+                uiController.ShowGameOverUI();
+            }
+        }
+
     }
 
     public void StartGame()
