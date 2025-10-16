@@ -16,9 +16,9 @@ public class ObjectPool : MonoBehaviour
         _PooledInstanceInactiveParant = new GameObject();
         _PooledInstanceInactiveParant.transform.SetParent(this.transform);
         _PooledInstanceInactiveParant.SetActive(false);
-
         _Pool = new Queue<GameObject>();
         pooledPrefab.SetActive(false);
+
         for (int i = 0; i < defaultPersistentCapacity; i++)
         {
             _Pool.Enqueue(CreateGameObject());
@@ -27,30 +27,74 @@ public class ObjectPool : MonoBehaviour
 
     public GameObject GetObject()
     {
-        GameObject obj = (0 < _Pool.Count) ? _Pool.Dequeue() : CreateGameObject();
+        GameObject obj = null;
+
+        //return pull
+        while (_Pool.Count > 0)
+        {
+            obj = _Pool.Dequeue();
+            if (obj != null) break; 
+        }
+
+        // create pull
+        if (obj == null)
+        {
+            obj = CreateGameObject();
+        }
+
         obj.transform.SetParent(null);
+        obj.SetActive(true);
         return obj;
     }
 
     public GameObject GetObject(Transform parent)
     {
-        GameObject obj = (0 < _Pool.Count) ? _Pool.Dequeue() : CreateGameObject();
+        GameObject obj = null;
+
+        while (_Pool.Count > 0)
+        {
+            obj = _Pool.Dequeue();
+            if (obj != null) break;
+        }
+        if (obj == null)
+        {
+            obj = CreateGameObject();
+        }
+
         obj.transform.SetParent(parent);
+        obj.SetActive(true);
         return obj;
     }
 
     public GameObject GetObject(GameObject parent)
     {
-        GameObject obj = (0 < _Pool.Count) ? _Pool.Dequeue() : CreateGameObject();
+        GameObject obj = null;
+
+        while (_Pool.Count > 0)
+        {
+            obj = _Pool.Dequeue();
+            if (obj != null) break;
+        }
+
+        if (obj == null)
+        {
+            obj = CreateGameObject();
+        }
+
         obj.transform.SetParent(parent.transform);
+        obj.SetActive(true);
         return obj;
     }
 
     public void ReturnObject(GameObject obj)
     {
-        if (_Pool.Count >= maxPersistentCapacity) Destroy(obj);
+        if (obj == null) return;  
+
+        if (_Pool.Count >= maxPersistentCapacity)
+            Destroy(obj);
         else
         {
+            obj.SetActive(false);
             obj.transform.SetParent(_PooledInstanceInactiveParant.transform);
             _Pool.Enqueue(obj);
         }

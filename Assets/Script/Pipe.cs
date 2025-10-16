@@ -3,7 +3,7 @@ using UnityEngine;
 public class Pipe : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 2f;
-    [SerializeField] private float destroyX = -10f;
+    [SerializeField] private float destroyX = -12f;
 
     private ObjectPool parentPool;
 

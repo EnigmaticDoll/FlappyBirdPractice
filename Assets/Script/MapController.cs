@@ -64,7 +64,7 @@ public class MapController : MonoBehaviour
         coinTimer = coinSpawnInterval;
 
         baseWidth = basePrefab.GetComponent<SpriteRenderer>().size.x * basePrefab.transform.lossyScale.x;
-        spawnOffset = Camera.main.orthographicSize * Camera.main.aspect;
+        spawnOffset = Camera.main.orthographicSize * Camera.main.aspect+5f;
 
         ReturnAllObjectsToPool();
         CreateBaseObjects();
