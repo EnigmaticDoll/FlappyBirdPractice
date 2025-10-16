@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 2f;
-    [SerializeField] private float destroyX = -10f;
+    //[SerializeField] private float moveSpeed = 2f;
+    //[SerializeField] private float destroyX = -10f;
 
     private ScoreUIManager scoreManager;
-    private ObjectPool parentPool;
+    //private ObjectPool parentPool;
 
     void Start()
     {
@@ -19,15 +19,15 @@ public class Coin : MonoBehaviour
             scoreManager = FindObjectOfType<ScoreUIManager>();
     }
 
-    void Update()
-    {
-        transform.position += Vector3.left * moveSpeed * Time.deltaTime;
+    //void Update()
+    //{
+    //    transform.position += Vector3.left * moveSpeed * Time.deltaTime;
 
-        if (transform.position.x < destroyX)
-        {
-            ReturnToPool();
-        }
-    }
+    //    if (transform.position.x < destroyX)
+    //    {
+    //        ReturnToPool();
+    //    }
+    //}
 
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -37,24 +37,24 @@ public class Coin : MonoBehaviour
             {
                 scoreManager.OnCoinCollected();
             }
-            ReturnToPool();
+            SendMessageUpwards("OnPlayerCollectCoin", this.gameObject);
         }
     }
 
-    public void SetPool(ObjectPool pool)
-    {
-        parentPool = pool;
-    }
+    //public void SetPool(ObjectPool pool)
+    //{
+    //    parentPool = pool;
+    //}
 
-    private void ReturnToPool()
-    {
-        if (parentPool != null)
-        {
-            parentPool.ReturnObject(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+    //private void ReturnToPool()
+    //{
+    //    if (parentPool != null)
+    //    {
+    //        parentPool.ReturnObject(gameObject);
+    //    }
+    //    else
+    //    {
+    //        Destroy(gameObject);
+    //    }
+    //}
 }

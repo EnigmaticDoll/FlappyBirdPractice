@@ -162,13 +162,13 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 441759508372292797}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_GravityScale: 2
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -180,7 +180,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 0
 --- !u!114 &8918482717502568144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,8 +193,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0d8ef2d2ad949143995d90b3a7f2c4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flyForce: 3
-  upRotate: 5
-  downRotate: -5
+  velocityOnClick: 6
+  gravity: 0.5
+  minRotation: -70
+  maxRotation: 20
+  angularVelocityOnClick: 720
+  angularAcceleration: -2400
   animator: {fileID: 0}
   isDead: 0

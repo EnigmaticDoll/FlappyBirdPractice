@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
-    [SerializeField] private GameObject pooledPrefab;
+    [SerializeField] public GameObject pooledPrefab;        // TODO: this is not good but refactor later
     [SerializeField] private uint defaultPersistentCapacity;
     [SerializeField] private uint maxPersistentCapacity;
 
