@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 
 public class MapController : MonoBehaviour
 {
@@ -18,7 +19,6 @@ public class MapController : MonoBehaviour
     [Header("Spawn Settings")]
     [SerializeField] private float pipeSpawnInterval = 2f;
     [SerializeField] private float coinSpawnInterval = 3f;
-    [SerializeField] private float spawnX = 12f;
     [SerializeField] private float pipeMinY = 0.5f;
     [SerializeField] private float pipeMaxY = 2f;
     [SerializeField] private float coinMinY = -2f;
@@ -31,6 +31,7 @@ public class MapController : MonoBehaviour
     private bool isGameRunning = false;
     private float pipeTimer = 0f;
     private float coinTimer = 0f;
+    private float spawnOffset;
     private float baseWidth;
 
     void Update()
@@ -63,6 +64,7 @@ public class MapController : MonoBehaviour
         coinTimer = coinSpawnInterval;
 
         baseWidth = basePrefab.GetComponent<SpriteRenderer>().size.x * basePrefab.transform.lossyScale.x;
+        spawnOffset = Camera.main.orthographicSize * Camera.main.aspect;
 
         ReturnAllObjectsToPool();
         CreateBaseObjects();
@@ -120,18 +122,18 @@ public class MapController : MonoBehaviour
         if (base1 != null) Destroy(base1);
         if (base2 != null) Destroy(base2);
 
-        base1 = Instantiate(basePrefab, new Vector3(0, baseYPosition, 0), Quaternion.identity);
-        base2 = Instantiate(basePrefab, new Vector3(baseWidth, baseYPosition, 0), Quaternion.identity);
+        base1 = Instantiate(basePrefab, new Vector3(0, baseYPosition, 0), Quaternion.identity, this.transform);
+        base2 = Instantiate(basePrefab, new Vector3(baseWidth, baseYPosition, 0), Quaternion.identity, this.transform);
     }
 
     private void SpawnPipe()
     {
-        GameObject pipe = pipePool.GetObject();
+        GameObject pipe = pipePool.GetObject(this.transform);
 
         if (pipe != null)
         {
             float randomY = Random.Range(pipeMinY, pipeMaxY);
-            pipe.transform.position = new Vector3(spawnX, randomY, 0);
+            pipe.transform.position = new Vector3(spawnOffset, randomY, 0);
             pipe.SetActive(true);
 
             Pipe pipeScript = pipe.GetComponent<Pipe>();
@@ -151,7 +153,7 @@ public class MapController : MonoBehaviour
         if (coin != null)
         {
             float randomY = Random.Range(coinMinY, coinMaxY);
-            coin.transform.position = new Vector3(spawnX, randomY, 0);
+            coin.transform.position = new Vector3(spawnOffset, randomY, 0);
             coin.SetActive(true);
 
             Coin coinScript = coin.GetComponent<Coin>();
