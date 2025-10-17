@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float angularAcceleration = -2400;
     [SerializeField] private Animator animator;
 
-    private bool isGameStarted = false;
+    GameManager.GameState gameStateCache;
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D rigidBody;
     public bool isDead;
@@ -31,7 +31,7 @@ public class Player : MonoBehaviour
         startRotation = rigidBody.rotation;
     }
 
-    private void OnEnable()
+    private void OnGameReady()
     {
         isDead = false;
         isOnGround = false;
@@ -56,7 +56,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (!isGameStarted || isDead) return;
+        if (GameManager.GameState.Ongoing != gameStateCache || isDead) return;
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -69,7 +69,7 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!isGameStarted) return;
+        if (GameManager.GameState.Ongoing != gameStateCache && GameManager.GameState.GameOver != gameStateCache) return;
 
         rigidBody.velocity =
             isOnGround
@@ -103,15 +103,15 @@ public class Player : MonoBehaviour
 
     }
 
-    public void StartGame()
-    {
-        isGameStarted = true;
-        rigidBody.gravityScale = 1;
-        if (spriteRenderer != null)
-            spriteRenderer.enabled = true;
-        if (animator != null)
-            animator.enabled = true;
-    }
+    //public void StartGame()
+    //{
+    //    isGameStarted = true;
+    //    rigidBody.gravityScale = 1;
+    //    if (spriteRenderer != null)
+    //        spriteRenderer.enabled = true;
+    //    if (animator != null)
+    //        animator.enabled = true;
+    //}
 
     public void ResetPlayer()
     {
@@ -131,5 +131,27 @@ public class Player : MonoBehaviour
         //    animator.Rebind();
         //    animator.Update(0f);
         //}
+    }
+
+    private void OnGameStateChange(GameManager.GameState gameState)
+    {
+        gameStateCache = gameState;
+        // TODO: this function is called when GameManager changes its game state.
+        //       so cache this value and use that value in the FixedUpdate and Update function.
+        // TODO: because the cached value do not cover other non-script components such as animators
+        //       and rigidbodies, we need to disable and enable those components in this function.
+        //       enable such components when the game is resummed and disable them when the game is paused.
+        switch (gameState)
+        {
+            case GameManager.GameState.GameReady:
+                OnGameReady();
+                break;
+            case GameManager.GameState.Ongoing:
+                break;
+            case GameManager.GameState.GameOver:
+                break;
+            case GameManager.GameState.Paused:
+                break;
+        }
     }
 }

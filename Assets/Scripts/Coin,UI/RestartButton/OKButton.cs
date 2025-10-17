@@ -7,7 +7,8 @@ public class OKButton : MonoBehaviour, IPointerClickHandler
     {
         if (UIController.Instance != null)
         {
-            UIController.Instance.RestartGame();
+            //UIController.Instance.RestartGame();
+            SendMessageUpwards("OnPressRestartButton");
         }
     }
 }

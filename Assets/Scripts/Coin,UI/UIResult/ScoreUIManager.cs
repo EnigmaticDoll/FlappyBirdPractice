@@ -13,8 +13,9 @@ public class ScoreUIManager : MonoBehaviour
     [SerializeField] private Vector2 numberSize = new Vector2(40f, 60f);
 
     [Header("Pool Size")]
-    [SerializeField] private int poolSize = 10; 
+    [SerializeField] private int poolSize = 10;
 
+    GameManager.GameState gameStateCache;
     private Queue<Image> numberPool = new Queue<Image>();
     private List<Image> activeNumbers = new List<Image>();
     private int currentScore = 0;
@@ -74,8 +75,6 @@ public class ScoreUIManager : MonoBehaviour
         UpdateScoreDisplay(currentScore);
     }
     
-
-
     public void OnCoinCollected()
     {
         AddScore(1);
@@ -117,5 +116,26 @@ public class ScoreUIManager : MonoBehaviour
     public int GetCurrentScore()
     {
         return currentScore;
+    }
+
+    private void OnGameStateChange(GameManager.GameState gameState)
+    {
+        gameStateCache = gameState;
+        // TODO: this function is called when GameManager changes its game state.
+        //       so cache this value and use that value in the FixedUpdate and Update function.
+        // TODO: because the cached value do not cover other non-script components such as animators
+        //       and rigidbodies, we need to disable and enable those components in this function.
+        //       enable such components when the game is resummed and disable them when the game is paused.
+        switch (gameState)
+        {
+            case GameManager.GameState.GameReady:
+                break;
+            case GameManager.GameState.Ongoing:
+                break;
+            case GameManager.GameState.GameOver:
+                break;
+            case GameManager.GameState.Paused:
+                break;
+        }
     }
 }
