@@ -129,6 +129,7 @@ public class ScoreUIManager : MonoBehaviour
         switch (gameState)
         {
             case GameManager.GameState.GameReady:
+                ResetScore();
                 break;
             case GameManager.GameState.Ongoing:
                 break;
