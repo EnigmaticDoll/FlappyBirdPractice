@@ -22,13 +22,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private MapController mapController;
     [SerializeField] private Player player;
 
-    [Header("Configuration")]
-    [SerializeField] private float gameResetTimeLimit = 2.0f;
-
     public uint globalGameScore { get; private set; } = 0;
     public GameState globalGameState { get; private set; }
-
-    private float gameOverResetTimer;
 
     private void Awake()
     {
@@ -56,7 +51,6 @@ public class GameManager : MonoBehaviour
             case GameState.Ongoing:
                 if (null != player && player.isDead)
                 {
-                    gameOverResetTimer = 0;
                     globalGameState = GameState.GameOver;
                     BroadcastMessage("OnGameStateChange", globalGameState);
                 }
@@ -64,12 +58,7 @@ public class GameManager : MonoBehaviour
                 // if so, implement buttons with SendMessageUpwards.
                 break;
             case GameState.GameOver:
-                gameOverResetTimer += Time.fixedDeltaTime;
-                if (gameOverResetTimer >= gameResetTimeLimit)
-                {
-                    globalGameState = GameState.GameReady;
-                    BroadcastMessage("OnGameStateChange", globalGameState);
-                }
+                // press reset button to restart game, see OnPressRestartButton
                 break;
             case GameState.Paused:
                 // not implemented yet.
@@ -81,5 +70,11 @@ public class GameManager : MonoBehaviour
     {
         scoreUIManager.OnCoinCollected();
         
+    }
+
+    private void OnPressRestartButton()
+    {
+        globalGameState = GameState.GameReady;
+        BroadcastMessage("OnGameStateChange", globalGameState);
     }
 }
