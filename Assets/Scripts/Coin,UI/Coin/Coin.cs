@@ -21,6 +21,7 @@ public class Coin : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            SoundManager.instance.coinGetSound.Play();
             SendMessageUpwards("OnPlayerCollectCoin", this.gameObject);
         }
     }

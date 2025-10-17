@@ -22,6 +22,8 @@ public class Player : MonoBehaviour
     private Vector2 startPosition;
     private float startRotation;
 
+    bool hitSoundPlayed = false;
+
     private void Awake()
     {
         rigidBody = GetComponent<Rigidbody2D>();
@@ -35,6 +37,7 @@ public class Player : MonoBehaviour
     {
         isDead = false;
         isOnGround = false;
+        hitSoundPlayed = false;
 
         rigidBody.velocity = Vector2.zero;
         rigidBody.angularVelocity = 0;
@@ -64,6 +67,7 @@ public class Player : MonoBehaviour
             rigidBody.angularVelocity = angularVelocityOnClick;
             animator.Rebind();
             animator.Update(0f);
+            SoundManager.instance.playerWingSound.Play();
         }
     }
 
@@ -89,16 +93,29 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Obstacle"))
+        if (collision.gameObject.CompareTag("Obstacle") && !hitSoundPlayed)
         {
             isDead = true;
             animator.enabled = false;
+            SoundManager.instance.playerWingSound.Stop();
+            SoundManager.instance.playerHitSound.Play();
+            SoundManager.instance.playerDeadSound.Play();
+            hitSoundPlayed = true;
         }
         if (collision.gameObject.CompareTag("Base"))
         {
-            isDead = true;
             isOnGround = true;
-            animator.enabled = false;
+            if (!hitSoundPlayed)
+            {
+                isDead = true;
+                animator.enabled = false;
+                SoundManager.instance.playerWingSound.Stop();
+                SoundManager.instance.playerHitSound.Play();
+                SoundManager.instance.playerDeadSound.Play();
+                hitSoundPlayed = true;
+
+            }
+
         }
 
     }
