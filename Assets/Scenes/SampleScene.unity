@@ -789,7 +789,6 @@ MonoBehaviour:
   scoreUIManager: {fileID: 1828930120}
   mapController: {fileID: 991022187}
   player: {fileID: 2091535626}
-  gameResetTimeLimit: 2
 --- !u!4 &1354911695
 Transform:
   m_ObjectHideFlags: 0
