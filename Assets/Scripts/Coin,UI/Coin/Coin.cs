@@ -2,11 +2,9 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    //[SerializeField] private float moveSpeed = 2f;
-    //[SerializeField] private float destroyX = -10f;
+    GameManager.GameState gameStateCache;
 
     private ScoreUIManager scoreManager;
-    //private ObjectPool parentPool;
 
     void Start()
     {
@@ -19,42 +17,32 @@ public class Coin : MonoBehaviour
             scoreManager = FindObjectOfType<ScoreUIManager>();
     }
 
-    //void Update()
-    //{
-    //    transform.position += Vector3.left * moveSpeed * Time.deltaTime;
-
-    //    if (transform.position.x < destroyX)
-    //    {
-    //        ReturnToPool();
-    //    }
-    //}
-
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            if (scoreManager != null)
-            {
-                scoreManager.OnCoinCollected();
-            }
             SendMessageUpwards("OnPlayerCollectCoin", this.gameObject);
         }
     }
 
-    //public void SetPool(ObjectPool pool)
-    //{
-    //    parentPool = pool;
-    //}
-
-    //private void ReturnToPool()
-    //{
-    //    if (parentPool != null)
-    //    {
-    //        parentPool.ReturnObject(gameObject);
-    //    }
-    //    else
-    //    {
-    //        Destroy(gameObject);
-    //    }
-    //}
+    private void OnGameStateChange(GameManager.GameState gameState)
+    {
+        gameStateCache = gameState;
+        // TODO: this function is called when GameManager changes its game state.
+        //       so cache this value and use that value in the FixedUpdate and Update function.
+        // TODO: because the cached value do not cover other non-script components such as animators
+        //       and rigidbodies, we need to disable and enable those components in this function.
+        //       enable such components when the game is resummed and disable them when the game is paused.
+        switch (gameState)
+        {
+            case GameManager.GameState.GameReady:
+                break;
+            case GameManager.GameState.Ongoing:
+                break;
+            case GameManager.GameState.GameOver:
+                break;
+            case GameManager.GameState.Paused:
+                break;
+        }
+    }
 }
